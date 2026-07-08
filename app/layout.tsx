@@ -20,9 +20,15 @@ const menuData: Record<string, MenuItem[]> = {
     { label: "Quality", href: "/production/dashboard/quality" },
     { label: "Management", href: "/production/dashboard/management" },
   ],
+  IoT: [
+    { label: "Machine Pres", href: "/production/iot/press" },
+    { label: "Machine Injection", href: "/production/iot/injection" },
+    { label: "Machine Role", href: "/production/iot/role" },
+    { label: "Machine Mold", href: "/production/iot/mold" },
+  ],
   Machine: [
-    { label: "Machine Pres", href: "/production/dummy" },
-    { label: "Machine Injection", href: "/production/dummy" },
+    { label: "Machine Pres", href: "/production/machine/press" },
+    { label: "Machine Injection", href: "/production/machine/injection" },
     { label: "Machine Role", href: "/production/dummy" },
     { label: "Machine Mold", href: "/production/dummy" },
   ],
