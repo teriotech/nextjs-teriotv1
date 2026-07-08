@@ -25,19 +25,22 @@ export async function POST(request: NextRequest) {
     const supabase = await createServerSupabaseClient();
     const body = await request.json();
     
-    // KEMBALIKAN: Hapus created_at dari sini
-    const { machine_no, count_no, product_name, user } = body;
+    // BACKWARD COMPATIBILITY: Ambil field baru maupun field lama
+    const machine_no = body.machine_no || "MC-01"; // Fallback default machine jika kosong
+    const count_no = body.count_no !== undefined ? body.count_no : body.counting; // Map counting ke count_no
+    const product_name = body.product_name;
+    const user = body.user || "Operator_System"; // Fallback default user jika kosong
 
+    // Validasi pengecekan field wajib setelah di-mapping
     if (!machine_no || count_no === undefined || !product_name || !user) {
       return NextResponse.json(
-        { error: "Missing required fields (machine_no, count_no, product_name, user)" },
+        { error: "Missing required fields (machine_no/machine_no, count_no/counting, product_name, user)" },
         { status: 400 }
       );
     }
 
     const { data, error } = await supabase
       .from("machine_press")
-      // KEMBALIKAN: Biarkan Supabase yang mengisi created_at otomatis
       .insert([{ machine_no, count_no, product_name, user }])
       .select();
 
