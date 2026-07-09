@@ -39,9 +39,9 @@ export default function DashboardPage() {
   const [selectedMachine, setSelectedMachine] = useState<string>("All");
   const [timeFilter, setTimeFilter] = useState<string>("daily"); // Untuk chart bawah
 
-  // Fetch Data dari API
+  // Fetch Data dari API setiap 10 detik
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchData = async (isInitialLoad = false) => {
       try {
         const res = await fetch("/api/machine_press");
         if (res.ok) {
@@ -54,10 +54,23 @@ export default function DashboardPage() {
       } catch (error) {
         console.error("Failed to fetch data:", error);
       } finally {
-        setLoading(false);
+        // Hanya matikan loading screen pada load pertama kali
+        if (isInitialLoad) {
+          setLoading(false);
+        }
       }
     };
-    fetchData();
+
+    // Panggil fetch pertama kali saat komponen di-mount
+    fetchData(true);
+
+    // Set interval untuk fetch ulang setiap 10 detik (10000 ms)
+    const intervalId = setInterval(() => {
+      fetchData(false);
+    }, 10000);
+
+    // Cleanup function untuk membersihkan interval saat komponen di-unmount
+    return () => clearInterval(intervalId);
   }, []);
 
   // Dapatkan daftar mesin unik untuk Dropdown
