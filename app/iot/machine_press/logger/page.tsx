@@ -23,20 +23,34 @@ export default function MachinePressPage() {
   const [isSimulating, setIsSimulating] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
-  // State untuk Filter & Search
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [startDate, setStartDate] = useState<string>("");
   const [endDate, setEndDate] = useState<string>("");
 
-  // State & Ref untuk Auto Trigger
   const [isAutoMode, setIsAutoMode] = useState<boolean>(false);
   const recordsRef = useRef<MachinePressRecord[]>([]);
   const isAutoModeRef = useRef<boolean>(false);
 
-  const loggedInUser = "Admin LGE"; 
   const tableContainerRef = useRef<HTMLDivElement>(null);
 
-  // Update Ref setiap kali state berubah untuk menghindari stale closure di setTimeout
+  // --- FUNGSI BARU: Ambil user langsung saat fungsi dipanggil ---
+  // Ini mencegah React "mengingat" state lama (Stale Closure)
+  const getLoggedInUser = () => {
+    if (typeof window !== "undefined") {
+      const storedUser = localStorage.getItem("currentUser");
+      if (storedUser) {
+        try {
+          const parsedUser = JSON.parse(storedUser);
+          return parsedUser.name ? parsedUser.name.split(" ")[0] : "User";
+        } catch (e) {
+          console.error("Gagal membaca data user", e);
+        }
+      }
+    }
+    return "Unknown User";
+  };
+  // --------------------------------------------------------------
+
   useEffect(() => {
     recordsRef.current = records;
   }, [records]);
@@ -72,7 +86,6 @@ export default function MachinePressPage() {
       const randomMachine = DUMMY_MACHINES[Math.floor(Math.random() * DUMMY_MACHINES.length)];
       const randomProduct = DUMMY_PRODUCTS[Math.floor(Math.random() * DUMMY_PRODUCTS.length)];
       
-      // Gunakan recordsRef.current agar selalu mendapatkan data terbaru saat dipanggil otomatis
       const machineRecords = recordsRef.current.filter((r) => r.machine_no === randomMachine);
       const nextCount = machineRecords.length > 0 
         ? Math.max(...machineRecords.map((r) => r.count_no)) + 1 
@@ -82,7 +95,8 @@ export default function MachinePressPage() {
         machine_no: randomMachine,
         count_no: nextCount,
         product_name: randomProduct,
-        user: loggedInUser,
+        // Panggil fungsi getLoggedInUser() di sini agar selalu mendapat data paling baru
+        user: getLoggedInUser(), 
       };
 
       const response = await fetch("/api/machine_press", {
@@ -104,20 +118,18 @@ export default function MachinePressPage() {
     }
   };
 
-  // Effect khusus untuk menjalankan Auto Trigger
   useEffect(() => {
     let timeoutId: NodeJS.Timeout;
 
     const scheduleNext = () => {
       if (!isAutoModeRef.current) return;
       
-      // Random waktu antara 1000ms (1s) hingga 90000ms (90s)
       const delay = Math.floor(Math.random() * (70000 - 1000 + 1)) + 1000;
       
       timeoutId = setTimeout(async () => {
         if (isAutoModeRef.current) {
           await handleSimulateTrigger();
-          scheduleNext(); // Jadwalkan trigger berikutnya setelah proses saat ini selesai
+          scheduleNext(); 
         }
       }, delay);
     };
@@ -147,10 +159,8 @@ export default function MachinePressPage() {
     });
   };
 
-  // 1. Logika Filter & Search
   const filteredRecords = useMemo(() => {
     return records.filter((record) => {
-      // Filter Search (General)
       const searchLower = searchQuery.toLowerCase();
       const matchesSearch = 
         record.machine_no.toLowerCase().includes(searchLower) ||
@@ -158,7 +168,6 @@ export default function MachinePressPage() {
         record.user.toLowerCase().includes(searchLower) ||
         String(record.id).includes(searchLower);
 
-      // Filter Tanggal
       let matchesDate = true;
       const recordDateStr = record.timestamp || record.created_at;
       
@@ -180,15 +189,13 @@ export default function MachinePressPage() {
     });
   }, [records, searchQuery, startDate, endDate]);
 
-  // 2. Setup Virtualizer
   const rowVirtualizer = useVirtualizer({
     count: filteredRecords.length,
     getScrollElement: () => tableContainerRef.current,
-    estimateSize: () => 56, // Estimasi tinggi baris (px)
-    overscan: 5, // Render 5 baris ekstra di luar layar agar scroll mulus
+    estimateSize: () => 56, 
+    overscan: 5, 
   });
 
-  // 3. Fungsi Export Excel
   const handleExportExcel = () => {
     const dataToExport = filteredRecords.map((r) => ({
       "ID": r.id,
@@ -203,13 +210,11 @@ export default function MachinePressPage() {
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, "Data Log");
     
-    // Generate file dan download
     XLSX.writeFile(workbook, `Machine_Press_Log_${new Date().getTime()}.xlsx`);
   };
 
   return (
     <div className="flex flex-col gap-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
-      
       {/* HEADER & ACTION SECTION */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div className="flex flex-col gap-1">
@@ -222,7 +227,6 @@ export default function MachinePressPage() {
         </div>
 
         <div className="flex flex-wrap items-center gap-2">
-          {/* Tombol Auto Trigger */}
           <button
             onClick={() => setIsAutoMode(!isAutoMode)}
             className={`flex items-center gap-2 px-4 py-2.5 rounded-lg text-xs font-bold uppercase tracking-widest transition-all shrink-0 ${
@@ -246,7 +250,6 @@ export default function MachinePressPage() {
             )}
           </button>
 
-          {/* Tombol Manual Trigger */}
           <button
             onClick={handleSimulateTrigger}
             disabled={isSimulating || isLoading || isAutoMode}
@@ -340,11 +343,7 @@ export default function MachinePressPage() {
           </span>
         </div>
         
-        {/* Container untuk Virtualizer (Harus memiliki height dan overflow-auto) */}
-        <div 
-          ref={tableContainerRef} 
-          className="overflow-auto h-[500px] relative custom-scrollbar"
-        >
+        <div ref={tableContainerRef} className="overflow-auto h-[500px] relative custom-scrollbar">
           <table className="w-full text-left border-collapse">
             <thead className="sticky top-0 z-10 bg-[#09090b] shadow-md">
               <tr className="bg-white/[0.02] text-[10px] uppercase tracking-widest text-zinc-500 border-b border-white/[0.05]">
@@ -377,12 +376,10 @@ export default function MachinePressPage() {
                 </tr>
               ) : (
                 <>
-                  {/* Padding Atas untuk Virtualizer */}
                   {rowVirtualizer.getVirtualItems().length > 0 && (
                     <tr style={{ height: `${rowVirtualizer.getVirtualItems()[0].start}px` }}></tr>
                   )}
                   
-                  {/* Render Baris yang Terlihat Saja */}
                   {rowVirtualizer.getVirtualItems().map((virtualRow) => {
                     const item = filteredRecords[virtualRow.index];
                     return (
@@ -402,7 +399,7 @@ export default function MachinePressPage() {
                         <td className="p-4 font-medium text-white">{item.product_name}</td>
                         <td className="p-4 flex items-center gap-2">
                           <div className="w-5 h-5 rounded-full bg-gradient-to-br from-[#00F0FF] to-[#7000FF] flex items-center justify-center text-[8px] font-bold text-white uppercase shrink-0">
-                            {item.user.charAt(0)}
+                            {item.user ? item.user.charAt(0) : "?"}
                           </div>
                           {item.user}
                         </td>
@@ -413,7 +410,6 @@ export default function MachinePressPage() {
                     );
                   })}
 
-                  {/* Padding Bawah untuk Virtualizer */}
                   {rowVirtualizer.getVirtualItems().length > 0 && (
                     <tr style={{ 
                       height: `${rowVirtualizer.getTotalSize() - rowVirtualizer.getVirtualItems()[rowVirtualizer.getVirtualItems().length - 1].end}px` 
