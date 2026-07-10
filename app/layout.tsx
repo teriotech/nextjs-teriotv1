@@ -95,7 +95,7 @@ const menuData: Record<string, MenuItem[]> = {
     { label: "Predictive Maintenance", href: "/maintenance/predictive_maintenance", status: "frontend" },
     { label: "Corrective Maintenance", href: "/maintenance/corrective_maintenance", status: "frontend" },
     { label: "Time Based Maintenance", href: "/maintenance/timebased_maintenance", status: "frontend" },
-    { label: "RTU Device", href: "/production/dummy" },
+    { label: "RTU Device", href: "/maintenance/rtu_device", status: "frontend" },
     { label: "Sparepart", href: "/production/dummy" },
     { label: "Maintenance Cost", href: "/production/dummy" },
     { label: "Lifetime Monitoring", href: "/production/dummy" },
@@ -193,6 +193,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   useEffect(() => {
     setExpandedMenu(null);
   }, [activeMenu]);
+
+  const handleHeaderMenuClick = (menu: string) => {
+    setActiveMenu(menu);
+    if (window.innerWidth < 768) {
+      setIsSidebarOpen(true);
+    }
+  };
 
   const activeUser = currentUser ? {
     NickName: currentUser.name ? currentUser.name.split(" ")[0] : "User",
@@ -631,7 +638,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                     .map((menu) => (
                       <button
                         key={menu}
-                        onClick={() => setActiveMenu(menu)}
+                        type="button"
+                        onClick={() => handleHeaderMenuClick(menu)}
                         className={`transition-all duration-300 whitespace-nowrap py-2 ${
                           activeMenu === menu
                             ? "text-[#00F0FF] drop-shadow-[0_0_8px_rgba(0,240,255,0.8)]"
