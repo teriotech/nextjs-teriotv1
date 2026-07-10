@@ -79,7 +79,7 @@ export default function Page() {
             <h2 className="text-base font-bold text-zinc-200 mb-2">RTU Status Log</h2>
             <div className="space-y-2 max-h-36 overflow-y-auto pr-2">
               {Array.from({ length: 5 }).map((_, i) => (
-                <div key={i} className="flex items-center gap-3 bg-white/[0.02] rounded-lg p-2">
+                <div key={`log-entry-${i}`} className="flex items-center gap-3 bg-white/[0.02] rounded-lg p-2">
                   <div className="w-8 h-8 rounded-full bg-white/[0.02] flex items-center justify-center text-xs text-zinc-300">{i + 1}</div>
                   <div className="flex-1 text-[0.68rem] text-zinc-300 leading-tight">Sample log message showing RTU status update — {format(new Date(), "yyyy-MM-dd HH:mm:ss")}</div>
                 </div>
