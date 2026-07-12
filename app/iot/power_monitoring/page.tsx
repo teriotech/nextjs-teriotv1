@@ -37,76 +37,66 @@ export default function PowerMeterDashboard() {
   ];
 
   return (
-    <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
+    <div className="min-h-screen bg-slate-950 text-slate-100 font-sans antialiased selection:bg-teal-500/30 p-4 md:p-6 flex flex-col gap-6 animate-in fade-in duration-500">
       
       {/* HEADER SECTION */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-[#09090b]/80 backdrop-blur-xl border border-white/[0.05] p-5 rounded-2xl shadow-[0_8px_32px_rgba(0,0,0,0.4)]">
-        <div>
-          <h1 className="text-xl md:text-2xl font-extrabold text-white tracking-tight">
-            Power Meter <span className="text-[#00F0FF]">Overview</span>
-          </h1>
-          <p className="text-xs text-zinc-400 mt-1">Monitoring konsumsi daya listrik secara real-time.</p>
+      <header className="bg-slate-900 border border-slate-800 rounded shadow-xl px-6 py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div className="flex items-center gap-3">
+          <div>
+            <h1 className="text-md font-bold tracking-wider text-slate-200 uppercase">
+              Power Meter <span className="text-teal-400">Overview</span>
+            </h1>
+            <p className="text-xs font-mono text-slate-500 mt-0.5">
+              Monitoring konsumsi daya listrik secara real-time.
+            </p>
+          </div>
         </div>
-        <div className="flex items-center gap-3 bg-black/50 border border-white/[0.05] px-4 py-2 rounded-xl">
-          <span className="relative flex h-2.5 w-2.5">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#00FF66] opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#00FF66] shadow-[0_0_8px_#00FF66]"></span>
-          </span>
-          <span className="text-[10px] font-bold text-[#00FF66] uppercase tracking-widest">
-            System Online
-          </span>
-        </div>
-      </div>
+      </header>
 
       {/* KPI CARDS GRID */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
         {/* Card 1: Voltage */}
-        <div className="bg-[#09090b]/80 backdrop-blur-xl border border-white/[0.05] p-5 rounded-2xl relative overflow-hidden group hover:border-[#00F0FF]/30 transition-all duration-300">
-          <div className="absolute top-0 right-0 w-24 h-24 bg-[#00F0FF]/5 rounded-full blur-2xl group-hover:bg-[#00F0FF]/10 transition-all"></div>
-          <h3 className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest mb-2">Voltage (V)</h3>
-          <div className="flex items-end gap-2">
-            <span className="text-3xl font-extrabold text-white">{metrics.voltage}</span>
-            <span className="text-sm text-zinc-400 mb-1">V</span>
+        <div className="bg-slate-900 border border-slate-800 p-4 rounded shadow-xl hover:border-teal-500/30 transition-colors">
+          <h3 className="text-[11px] font-bold text-teal-400 uppercase tracking-wider font-mono border-b border-slate-800 pb-1.5 mb-2">Voltage (V)</h3>
+          <div className="flex items-baseline gap-2">
+            <span className="text-2xl font-bold text-slate-100 font-mono">{metrics.voltage}</span>
+            <span className="text-[10px] text-slate-500 font-mono">V</span>
           </div>
         </div>
 
         {/* Card 2: Current */}
-        <div className="bg-[#09090b]/80 backdrop-blur-xl border border-white/[0.05] p-5 rounded-2xl relative overflow-hidden group hover:border-[#0066FF]/30 transition-all duration-300">
-          <div className="absolute top-0 right-0 w-24 h-24 bg-[#0066FF]/5 rounded-full blur-2xl group-hover:bg-[#0066FF]/10 transition-all"></div>
-          <h3 className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest mb-2">Current (A)</h3>
-          <div className="flex items-end gap-2">
-            <span className="text-3xl font-extrabold text-white">{metrics.current}</span>
-            <span className="text-sm text-zinc-400 mb-1">A</span>
+        <div className="bg-slate-900 border border-slate-800 p-4 rounded shadow-xl hover:border-teal-500/30 transition-colors">
+          <h3 className="text-[11px] font-bold text-teal-400 uppercase tracking-wider font-mono border-b border-slate-800 pb-1.5 mb-2">Current (A)</h3>
+          <div className="flex items-baseline gap-2">
+            <span className="text-2xl font-bold text-slate-100 font-mono">{metrics.current}</span>
+            <span className="text-[10px] text-slate-500 font-mono">A</span>
           </div>
         </div>
 
         {/* Card 3: Active Power */}
-        <div className="bg-[#09090b]/80 backdrop-blur-xl border border-white/[0.05] p-5 rounded-2xl relative overflow-hidden group hover:border-[#00FF66]/30 transition-all duration-300">
-          <div className="absolute top-0 right-0 w-24 h-24 bg-[#00FF66]/5 rounded-full blur-2xl group-hover:bg-[#00FF66]/10 transition-all"></div>
-          <h3 className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest mb-2">Active Power</h3>
-          <div className="flex items-end gap-2">
-            <span className="text-3xl font-extrabold text-[#00FF66] drop-shadow-[0_0_10px_rgba(0,255,102,0.2)]">{metrics.activePower}</span>
-            <span className="text-sm text-zinc-400 mb-1">kW</span>
+        <div className="bg-slate-900 border border-slate-800 p-4 rounded shadow-xl hover:border-teal-500/30 transition-colors">
+          <h3 className="text-[11px] font-bold text-teal-400 uppercase tracking-wider font-mono border-b border-slate-800 pb-1.5 mb-2">Active Power</h3>
+          <div className="flex items-baseline gap-2">
+            <span className="text-2xl font-bold text-teal-400 font-mono">{metrics.activePower}</span>
+            <span className="text-[10px] text-slate-500 font-mono">kW</span>
           </div>
         </div>
 
         {/* Card 4: Power Factor */}
-        <div className="bg-[#09090b]/80 backdrop-blur-xl border border-white/[0.05] p-5 rounded-2xl relative overflow-hidden group hover:border-purple-500/30 transition-all duration-300">
-          <div className="absolute top-0 right-0 w-24 h-24 bg-purple-500/5 rounded-full blur-2xl group-hover:bg-purple-500/10 transition-all"></div>
-          <h3 className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest mb-2">Power Factor</h3>
-          <div className="flex items-end gap-2">
-            <span className="text-3xl font-extrabold text-white">{metrics.powerFactor}</span>
-            <span className="text-sm text-zinc-400 mb-1">PF</span>
+        <div className="bg-slate-900 border border-slate-800 p-4 rounded shadow-xl hover:border-teal-500/30 transition-colors">
+          <h3 className="text-[11px] font-bold text-teal-400 uppercase tracking-wider font-mono border-b border-slate-800 pb-1.5 mb-2">Power Factor</h3>
+          <div className="flex items-baseline gap-2">
+            <span className="text-2xl font-bold text-slate-100 font-mono">{metrics.powerFactor}</span>
+            <span className="text-[10px] text-slate-500 font-mono">PF</span>
           </div>
         </div>
 
         {/* Card 5: Frequency */}
-        <div className="bg-[#09090b]/80 backdrop-blur-xl border border-white/[0.05] p-5 rounded-2xl relative overflow-hidden group hover:border-orange-500/30 transition-all duration-300">
-          <div className="absolute top-0 right-0 w-24 h-24 bg-orange-500/5 rounded-full blur-2xl group-hover:bg-orange-500/10 transition-all"></div>
-          <h3 className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest mb-2">Frequency</h3>
-          <div className="flex items-end gap-2">
-            <span className="text-3xl font-extrabold text-white">{metrics.frequency}</span>
-            <span className="text-sm text-zinc-400 mb-1">Hz</span>
+        <div className="bg-slate-900 border border-slate-800 p-4 rounded shadow-xl hover:border-teal-500/30 transition-colors">
+          <h3 className="text-[11px] font-bold text-teal-400 uppercase tracking-wider font-mono border-b border-slate-800 pb-1.5 mb-2">Frequency</h3>
+          <div className="flex items-baseline gap-2">
+            <span className="text-2xl font-bold text-slate-100 font-mono">{metrics.frequency}</span>
+            <span className="text-[10px] text-slate-500 font-mono">Hz</span>
           </div>
         </div>
       </div>
@@ -115,10 +105,10 @@ export default function PowerMeterDashboard() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         
         {/* CHART SECTION (Mockup) */}
-        <div className="lg:col-span-2 bg-[#09090b]/80 backdrop-blur-xl border border-white/[0.05] p-5 rounded-2xl shadow-[0_8px_32px_rgba(0,0,0,0.4)] flex flex-col">
-          <div className="flex justify-between items-center mb-6">
-            <h2 className="text-sm font-bold text-white uppercase tracking-wider">Trend Konsumsi Daya</h2>
-            <select className="bg-black/50 border border-white/[0.1] text-xs text-zinc-300 rounded-lg px-3 py-1.5 focus:outline-none focus:border-[#00F0FF]/50">
+        <div className="lg:col-span-2 bg-slate-900 border border-slate-800 p-5 rounded shadow-xl flex flex-col">
+          <div className="flex justify-between items-center border-b border-slate-800 pb-2 mb-4">
+            <h2 className="text-xs font-bold text-teal-400 uppercase tracking-wider font-mono">Trend Konsumsi Daya</h2>
+            <select className="bg-slate-950 border border-slate-800 text-[10px] text-slate-300 rounded px-2 py-1 outline-none focus:border-teal-500 font-mono transition-colors">
               <option>Hari Ini</option>
               <option>7 Hari Terakhir</option>
               <option>Bulan Ini</option>
@@ -126,22 +116,22 @@ export default function PowerMeterDashboard() {
           </div>
           
           {/* Mockup Bar Chart menggunakan Flexbox */}
-          <div className="flex-1 flex items-end justify-between gap-2 h-48 mt-auto border-b border-white/[0.05] pb-2">
+          <div className="flex-1 flex items-end justify-between gap-2 h-48 mt-auto border-b border-slate-800 pb-2">
             {[40, 65, 45, 80, 55, 90, 70, 85, 60, 75, 50, 95].map((height, idx) => (
               <div key={idx} className="w-full flex flex-col items-center gap-2 group">
                 <div 
-                  className="w-full bg-gradient-to-t from-[#0066FF]/40 to-[#00F0FF] rounded-t-sm opacity-70 group-hover:opacity-100 transition-all relative"
+                  className="w-full bg-slate-700 hover:bg-teal-400 rounded-t-sm transition-colors relative"
                   style={{ height: `${height}%` }}
                 >
                   {/* Tooltip on hover */}
-                  <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-white text-black text-[10px] font-bold px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                  <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-slate-950 border border-slate-800 text-slate-200 text-[10px] font-mono px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10">
                     {height}kW
                   </div>
                 </div>
               </div>
             ))}
           </div>
-          <div className="flex justify-between text-[9px] text-zinc-500 uppercase tracking-widest mt-3">
+          <div className="flex justify-between text-[10px] text-slate-500 font-mono mt-3">
             <span>00:00</span>
             <span>06:00</span>
             <span>12:00</span>
@@ -151,41 +141,41 @@ export default function PowerMeterDashboard() {
         </div>
 
         {/* RECENT LOGS TABLE */}
-        <div className="bg-[#09090b]/80 backdrop-blur-xl border border-white/[0.05] p-5 rounded-2xl shadow-[0_8px_32px_rgba(0,0,0,0.4)] flex flex-col">
-          <h2 className="text-sm font-bold text-white uppercase tracking-wider mb-4">Log Aktivitas Terbaru</h2>
+        <div className="bg-slate-900 border border-slate-800 p-5 rounded shadow-xl flex flex-col">
+          <h2 className="text-xs font-bold text-teal-400 uppercase tracking-wider font-mono border-b border-slate-800 pb-2 mb-4">Log Aktivitas Terbaru</h2>
           
           <div className="flex-1 overflow-x-auto">
-            <table className="w-full text-left text-xs">
+            <table className="w-full text-left font-mono text-xs">
               <thead>
-                <tr className="border-b border-white/[0.05] text-zinc-500 uppercase tracking-widest text-[9px]">
-                  <th className="pb-3 font-medium">Waktu</th>
-                  <th className="pb-3 font-medium">Mesin</th>
-                  <th className="pb-3 font-medium">Status</th>
-                  <th className="pb-3 font-medium text-right">Daya</th>
+                <tr className="border-b border-slate-800 text-slate-400 bg-slate-950/30">
+                  <th className="p-3 font-medium">Waktu</th>
+                  <th className="p-3 font-medium">Mesin</th>
+                  <th className="p-3 font-medium">Status</th>
+                  <th className="p-3 font-medium text-right">Daya</th>
                 </tr>
               </thead>
-              <tbody className="text-zinc-300">
+              <tbody className="divide-y divide-slate-800/50 text-slate-300">
                 {recentLogs.map((log) => (
-                  <tr key={log.id} className="border-b border-white/[0.02] hover:bg-white/[0.02] transition-colors">
-                    <td className="py-3">{log.time}</td>
-                    <td className="py-3">{log.machine}</td>
-                    <td className="py-3">
-                      <span className={`px-2 py-1 rounded-md text-[9px] font-bold uppercase tracking-wider ${
+                  <tr key={log.id} className="hover:bg-slate-950/30 transition-colors">
+                    <td className="p-3 text-slate-400">{log.time}</td>
+                    <td className="p-3">{log.machine}</td>
+                    <td className="p-3">
+                      <span className={`px-2 py-1 rounded text-[9px] font-bold uppercase tracking-wider ${
                         log.status === "Normal" 
-                          ? "bg-[#00FF66]/10 text-[#00FF66] border border-[#00FF66]/20" 
-                          : "bg-orange-500/10 text-orange-400 border border-orange-500/20"
+                          ? "bg-teal-500/10 text-teal-400 border border-teal-500/20" 
+                          : "bg-amber-500/10 text-amber-400 border border-amber-500/20"
                       }`}>
                         {log.status}
                       </span>
                     </td>
-                    <td className="py-3 text-right font-mono text-[#00F0FF]">{log.power}</td>
+                    <td className="p-3 text-right text-teal-400 font-semibold">{log.power}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
           
-          <button className="w-full mt-4 py-2 rounded-lg border border-white/[0.05] text-xs font-bold text-zinc-400 hover:text-white hover:bg-white/[0.02] transition-all uppercase tracking-widest">
+          <button className="w-full mt-4 py-2 rounded border border-slate-800 text-[11px] font-bold text-slate-400 hover:text-slate-200 hover:bg-slate-800 transition-all uppercase tracking-wider font-mono">
             Lihat Semua Log
           </button>
         </div>
